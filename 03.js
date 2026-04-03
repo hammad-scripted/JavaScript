@@ -64,3 +64,16 @@ console.log(--a); // This will print 11 and then decrement a by 1, which is 10.
 //? Ternary Operators in JavaScript
 console.log(a > b ? 'a is greater than b' : 'a is less than or equal to b'); // This will print 'a is greater than b' because a (10) is greater than b (5).
 console.log(a < b ? 'a is less than b' : 'a is greater than or equal to b'); // This will print 'a is greater than or equal to b' because a (10) is not less than b (5).
+
+// short circuiting
+
+// //  && returns the first falsy value or the last value if all are truthy
+console.log(false && true);
+console.log(0 && 'Hello');
+console.log('Hi' && 'Hello');
+
+//// || returns the first truthy value or the last value if all are falsy
+console.log(true || false);
+console.log('' || 'Hi');
+
+// ? falsy values in js are false,0,"",null,undefined,Nan
