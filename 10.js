@@ -49,3 +49,4 @@ const user1 = createPerson('Blob', 42);
 const user2 = createPerson('James', 32);
 console.log(user1);
 console.log(user2);
+console.log(createPerson.prototype);
