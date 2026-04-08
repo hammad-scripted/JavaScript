@@ -4,7 +4,7 @@ const quizScreen = document.getElementById('quiz-screen');
 const resultScreen = document.getElementById('result-screen');
 const startButton = document.getElementById('start-btn');
 const questionText = document.getElementById('question-text');
-const answerContainer = document.getElementById('answers-container');
+const answersContainer = document.getElementById('answers-container');
 const currentQuestionSpan = document.getElementById('current-question');
 const totalQuestionSpan = document.getElementById('total-questions');
 const scoreSpan = document.getElementById('score');
@@ -91,6 +91,46 @@ function startQuiz() {
   scoreSpan.textContent = score;
   startScreen.classList.remove('active');
   quizScreen.classList.add('active');
+  showQuestion();
+}
+function showQuestion() {
+  answersDisabled = false;
+  const currentQuestion = quizQuestions[currentQuestionIndex];
+  currentQuestionSpan.textContent = currentQuestionIndex + 1;
+
+  const progressPercent = (currentQuestionIndex / quizQuestions.length) * 100;
+  progressBar.style.width = progressPercent + '%';
+  questionText.textContent = currentQuestion.question;
+  console.log(questionText);
+  // todo explain
+  answersContainer.innerHTML = '';
+  currentQuestion.answers.forEach((ans) => {
+    const button = document.createElement('button');
+    button.textContent = ans.text;
+    button.classList.add('answer-btn');
+    // ? what is dataset? it's a property of the button element that allows you to score custom data
+    button.dataset.correct = ans.correct;
+
+    button.addEventListener('click', selectAnswer);
+    answersContainer.appendChild(button);
+  });
+}
+function selectAnswer(e) {
+  if (answersDisabled) {
+    return;
+  }
+  answersDisabled = true;
+  const selectButton = e.target;
+  const isCorrect = selectButton.dataset.correct === 'true';
+  Array.from(
+    answersContainer.children.forEach((button) => {
+      if (button.dataset.correct === 'true') {
+        button.classList.add('correct');
+      } else {
+        button.classList.add('incorrect');
+      }
+    }),
+  );
 }
 function restartQuiz() {
   console.log('restart');
