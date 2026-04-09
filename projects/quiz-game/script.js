@@ -91,7 +91,9 @@ function startQuiz() {
   scoreSpan.textContent = score;
   startScreen.classList.remove('active');
   quizScreen.classList.add('active');
-  showQuestion();
+  setTimeout(() => {
+    showQuestion();
+  });
 }
 function showQuestion() {
   answersDisabled = false;
@@ -101,7 +103,7 @@ function showQuestion() {
   const progressPercent = (currentQuestionIndex / quizQuestions.length) * 100;
   progressBar.style.width = progressPercent + '%';
   questionText.textContent = currentQuestion.question;
-  console.log(questionText);
+
   // todo explain
   answersContainer.innerHTML = '';
   currentQuestion.answers.forEach((ans) => {
@@ -110,7 +112,6 @@ function showQuestion() {
     button.classList.add('answer-btn');
     // ? what is dataset? it's a property of the button element that allows you to score custom data
     button.dataset.correct = ans.correct;
-
     button.addEventListener('click', selectAnswer);
     answersContainer.appendChild(button);
   });
@@ -122,16 +123,44 @@ function selectAnswer(e) {
   answersDisabled = true;
   const selectButton = e.target;
   const isCorrect = selectButton.dataset.correct === 'true';
-  Array.from(
-    answersContainer.children.forEach((button) => {
-      if (button.dataset.correct === 'true') {
-        button.classList.add('correct');
-      } else {
-        button.classList.add('incorrect');
-      }
-    }),
-  );
+  Array.from(answersContainer.children).forEach((button) => {
+    if (button.dataset.correct === 'true') {
+      button.classList.add('answer-btn-correct');
+    } else if (button === selectButton) {
+      button.classList.add('answer-btn-incorrect');
+    }
+  });
+  if (isCorrect) {
+    score++;
+    scoreSpan.textContent = score;
+  }
+  setTimeout(() => {
+    currentQuestionIndex++;
+    if (currentQuestionIndex < quizQuestions.length) {
+      showQuestion();
+    } else {
+      showResults();
+    }
+  }, 1000);
+}
+
+function showResults() {
+  quizScreen.classList.remove('active');
+  resultScreen.classList.add('active');
+  finalScoreSpan.textContent = score;
+  const percentage = (score / quizQuestions.length) * 100;
+  if (percentage == 100) {
+    resultMessage.textContent = 'Perfect! You are genius!';
+  } else if (percentage >= 80) {
+    resultMessage.textContent = 'Great Job! You know your stuff!';
+  } else if (percentage >= 60) {
+    resultMessage.textContent = 'Good Effort! Keep learning!';
+  } else {
+    resultMessage.textContent = 'Keep Studying! You will get better.';
+  }
 }
 function restartQuiz() {
+  resultScreen.classList.remove('active');
+  startQuiz();
   console.log('restart');
 }
