@@ -39,7 +39,15 @@ h1 {
   margin-bottom: 2rem;
   font-weight: 700;
 }
-
+h1::after {
+  content: '';
+  display: block;
+  width: 50%;
+  height: 4px;
+  background-color: var(--primary);
+  margin: 0.5rem auto 0 auto;
+  border-radius: var(--radius);
+}
 /* The Button */
 #generate-btn {
   display: flex;
